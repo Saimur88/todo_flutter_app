@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'To Do App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+      ),
+      home: const MyHomePage(title: 'To Do App'),
+    );
+  }
+}
+
+class Task{
+  String title;
+  bool isDone;
+  Task({required this.title, required this.isDone});
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+ List<Task> tasks = [
+   Task(title: 'Learn Flutter', isDone: false),
+   Task(title: 'Build To Do App', isDone: false),
+   Task(title: 'Study For Final', isDone: false),
+   Task(title: 'Eat', isDone: false),
+   Task(title: 'Sleep', isDone: false),
+ ];
+  @override
+  Widget build(BuildContext context) {
+    var time = DateTime.now();
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(Icons.menu, color: Colors.black,),
+            Container(
+              child: Text("To Do List",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),),
+            ),
+            Container(
+              
+              height: 40,
+              width: 40,
+              child:ClipRRect(
+                child: Image.asset('assets/images/user.png'),
+                
+              ),
+            )
+
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.small(onPressed: () {
+        print("Clicked");
+      },
+
+        backgroundColor: Colors.green,
+      child: Icon(Icons.add, color: Colors.black,),),
+      body: ListView.builder(
+          itemCount : tasks.length,
+          itemBuilder: (context, index) {
+            return Card(
+              elevation:6,
+              margin: EdgeInsets.all(10),
+              child: ListTile(
+                leading: Checkbox(
+                  value: tasks[index].isDone,
+                  onChanged: (value) {
+                    setState(() {
+                      tasks[index].isDone = value!;
+            )
+          },
+      )
+
+    );
+  }
+}
