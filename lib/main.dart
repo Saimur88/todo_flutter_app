@@ -26,6 +26,8 @@ class Task{
   Task({required this.title, required this.isDone});
 }
 
+
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -33,16 +35,20 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+
 }
 
 class _MyHomePageState extends State<MyHomePage> {
- List<Task> tasks = [
-   Task(title: 'Learn Flutter', isDone: false),
-   Task(title: 'Build To Do App', isDone: false),
-   Task(title: 'Study For Final', isDone: false),
-   Task(title: 'Eat', isDone: false),
-   Task(title: 'Sleep', isDone: false),
- ];
+
+  List<Task> tasks = [
+    Task(title: 'Learn Flutter', isDone: false),
+    Task(title: 'Build To Do App', isDone: false),
+    Task(title: 'Study For Final', isDone: false),
+    Task(title: 'Eat', isDone: false),
+    Task(title: 'Sleep', isDone: false),
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     var time = DateTime.now();
@@ -55,15 +61,18 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Icon(Icons.menu, color: Colors.black,),
             Container(
-              child: Text("To Do List",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),),
+              child: Text("To Do List", style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.black),),
             ),
             Container(
-              
+
               height: 40,
               width: 40,
-              child:ClipRRect(
+              child: ClipRRect(
                 child: Image.asset('assets/images/user.png'),
-                
+
               ),
             )
 
@@ -71,26 +80,48 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.small(onPressed: () {
-        print("Clicked");
+        print("Add Button Clicked");
       },
 
         backgroundColor: Colors.green,
-      child: Icon(Icons.add, color: Colors.black,),),
+        child: Icon(Icons.add, color: Colors.black,),),
       body: ListView.builder(
-          itemCount : tasks.length,
-          itemBuilder: (context, index) {
-            return Card(
-              elevation:6,
-              margin: EdgeInsets.all(10),
-              child: ListTile(
-                leading: Checkbox(
-                  value: tasks[index].isDone,
-                  onChanged: (value) {
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 6,
+            margin: EdgeInsets.all(10),
+            child: ListTile(
+              trailing: IconButton(
+                  onPressed: (){
                     setState(() {
-                      tasks[index].isDone = value!;
-            )
-          },
-      )
+                      tasks.removeAt(index);
+                    });
+                  },
+
+                icon: Icon(Icons.delete_forever),
+              color: Colors.red,
+              ),
+              subtitle: Text("Daily Task"),
+              leading: Checkbox(
+                value: tasks[index].isDone,
+                onChanged: (value) {
+                  setState(() {
+                    tasks[index].isDone = value!;
+                  });
+                },
+              ),
+              title: Text(
+                tasks[index].title,
+                style: TextStyle(
+                  decoration:
+                  tasks[index].isDone ? TextDecoration.lineThrough : null,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
 
     );
   }
