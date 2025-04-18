@@ -39,6 +39,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _taskController = TextEditingController();
+  void _showAddTaskDialog(){
+    showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
+          title: Text("Add New Task"),
+          content: TextField(
+            controller: _taskController,
+            decoration: InputDecoration(hintText: "Enter Task Title Here"),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel")),
+            TextButton(
+                onPressed: () {
+                  _addTask();
+                  Navigator.pop(context);
+                }, child: Text("Add"))
+          ],
+        ),
+    );
+  }
+  void _addTask(){
+    String newTaskTitle = _taskController.text;
+
+    if (newTaskTitle.isNotEmpty){
+      setState(() {
+        tasks.add(Task(title: newTaskTitle, isDone: false));
+      });
+      _taskController.clear();
+    }
+  }
 
   List<Task> tasks = [
     Task(title: 'Learn Flutter', isDone: false),
@@ -80,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.small(onPressed: () {
-        print("Add Button Clicked");
+        _showAddTaskDialog();
       },
 
         backgroundColor: Colors.green,
@@ -122,7 +155,6 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
       ),
-
     );
   }
 }
