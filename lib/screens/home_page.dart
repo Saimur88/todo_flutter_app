@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/firestore_service.dart';
+import 'package:todo_app/firestore_service.dart';
 
 
 
@@ -250,6 +251,19 @@ class _HomePageState extends State<HomePage> {
     Task(title: 'Eat', description: "Eat", isDone: false,createdAt: DateTime.now(),),
     Task(title: 'Sleep', description: "Sleep", isDone: false,createdAt: DateTime.now(),)
   ];
+
+  @override
+  void initState(){
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() async {
+    var fetchedTasks = await _firestoreService.getTasks();
+    setState(() {
+      tasks = fetchedTasks;
+    });
+  }
 
   final FirestoreService _firestoreService = FirestoreService();
 
