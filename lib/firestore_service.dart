@@ -13,6 +13,7 @@ class FirestoreService {
       // Map the documents to a list of Task objects
       List<Task> tasks = snapshot.docs.map((doc) {
         return Task(
+          id: doc.id,
           title: doc['title'],
           description: doc['description'],
           isDone: doc['isDone'],
@@ -25,6 +26,27 @@ class FirestoreService {
     } catch (e) {
       print("Error fetching tasks: $e");
       return [];
+    }
+  }
+
+  Future<void> updateTask(Task task) async {
+    try {
+      await _db.collection('tasks').doc(task.id).update({
+        'title' : task.title,
+        'description' : task.description,
+        'isDone' : task.isDone,
+        'createdAt' : task.createdAt,
+        'deadline' : task.deadline != null ? Timestamp.fromDate(task.deadline!) : null,
+      });
+    } catch (e) {
+      print("Error Updating task: $e");
+    }
+  }
+  Future<void> deleteTask(String id) async {
+    try {
+      await _db.collection('tasks').doc(id).delete();
+    } catch (e) {
+      print("Error deleting task: $e");
     }
   }
 

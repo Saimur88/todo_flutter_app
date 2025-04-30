@@ -126,14 +126,13 @@ class _HomePageState extends State<HomePage> {
       }
     }
     if (newTaskTitle.isNotEmpty && newDesc.isNotEmpty){
-      setState(() {
-        tasks.add(Task(
-            title: newTaskTitle,
-            description: newDesc,
-            isDone: false,
-            createdAt: DateTime.now(),
-          deadline: deadline,
-        ));
+      Task newTask = Task(
+        title: newTaskTitle,
+        description: newDesc,
+        isDone: false,
+        createdAt: DateTime.now(),
+        deadline: deadline,
+      );
 
         await _firestoreService.addTask(newTask);
         await _loadTasks();
@@ -141,7 +140,6 @@ class _HomePageState extends State<HomePage> {
         _taskController.clear();
         _descController.clear();
         _deadlineController.clear();
-      });
 
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Task Added Successfully"),
@@ -205,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                         _deadlineController.text =
                             "${pickDate.day}/${pickDate.month}/${pickDate.year}";
                       });
+                      await _firestoreService.updateTask(tasks[index]);
                     }
                   },
                 )
@@ -261,7 +260,7 @@ class _HomePageState extends State<HomePage> {
     _loadTasks();
   }
 
-  void _loadTasks() async {
+  Future<void> _loadTasks() async {
     var fetchedTasks = await _firestoreService.getTasks();
     setState(() {
       tasks = fetchedTasks;
@@ -477,10 +476,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     leading: Checkbox(
                       value: task.isDone,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           task.isDone = value!;
                         });
+                        await _firestoreService.updateTask(task);
                       },
                     ),
                     title: Text(
