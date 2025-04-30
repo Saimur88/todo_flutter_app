@@ -99,17 +99,16 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               }, child: Text("Cancel")),
           TextButton(
-              onPressed: (){
-                setState(() {
-                  await _firestoreServices.deleteTask(tasks[index].id!);
-                  await _loadTask();
-                });
+              onPressed: () async {
+                  await _firestoreService.deleteTask(tasks[index].id!);
+                  await _loadTasks();
                 Navigator.pop(context);
-              }, child: Text("Delete",style: TextStyle(color: Colors.red),))
+              },
+              child: Text("Delete",style: TextStyle(color: Colors.red),)),
         ],
       ),);
   }
-  Future<void> _addTask(String title) async {
+  Future<void> _addTask() async {
     String newTaskTitle = _taskController.text;
     String newDesc = _descController.text;
     DateTime? deadline;
@@ -136,8 +135,8 @@ class _HomePageState extends State<HomePage> {
           deadline: deadline,
         ));
 
-        await _firestoreServices.addTask(newTask);
-        await _loadTask();
+        await _firestoreService.addTask(newTask);
+        await _loadTasks();
 
         _taskController.clear();
         _descController.clear();
