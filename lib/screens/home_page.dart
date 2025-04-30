@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/firestore_service.dart';
 import 'package:todo_app/widgets/task_card.dart';
+import 'package:todo_app/widgets/custom_app_bar.dart';
 
 
 
@@ -268,7 +269,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var time = DateTime.now();
  final filteredTasks = tasks.where ( (task) {
    final matchesSearch = task.title.toLowerCase().contains(_searchQuery.toLowerCase());
 
@@ -291,46 +291,10 @@ class _HomePageState extends State<HomePage> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            PopupMenuButton<String>(
-              onSelected: (value){
-                if (value == 'complete_all'){
-                  _markAllTasksComplete();
-                } else if (value == 'incomplete_all'){
-                  _markAllTasksIncomplete();
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'complete_all',
-                  child: Text("Mark All Tasks Done"),
-                ),
-                PopupMenuItem(
-                    value: 'incomplete_all',
-                    child: Text("Mark All As Incomplete"))
-
-              ],),
-
-            Text("To Do List", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black),),
-            Container(
-
-              height: 40,
-              width: 40,
-              child: ClipRRect(
-                child: Image.asset('assets/images/user.png'),
-
-              ),
-            )
-
-          ],
-        ),
+      appBar: CustomAppBar(
+          title: 'My ToDo App',
+          onMarkAllComplete: _markAllTasksComplete,
+          onMarkAllIncomolete: _markAllTasksIncomplete,
       ),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
