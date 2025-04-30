@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
-  void _editTask(int index){
+  Future<void> _editTask(int index) async {
     _taskController.text = tasks[index].title;
     _descController.text = tasks[index].description;
     _deadlineController.text = tasks[index].deadline != null
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   }, child: Text("Cancel")),
               TextButton(
-                  onPressed: (){
+                  onPressed: () async {
                     setState(() {
                       tasks[index].title = _taskController.text;
                       tasks[index].description = _descController.text;
@@ -237,6 +237,7 @@ class _HomePageState extends State<HomePage> {
                      }
 
                     });
+                    await _firestoreService.updateTask(tasks[index]);
                     Navigator.pop(context);
                   }, child: Text("Save"))
             ],
@@ -246,13 +247,7 @@ class _HomePageState extends State<HomePage> {
 
   }
 
-  List<Task> tasks = [
-    Task(title: 'Learn Flutter', description: "Eat", isDone: false,createdAt: DateTime.now()),
-    Task(title: 'Build To Do App', description: "Sleep", isDone: false,createdAt: DateTime.now()),
-    Task(title: 'Study For Final', description: "Repeat", isDone: false,createdAt: DateTime.now()),
-    Task(title: 'Eat', description: "Eat", isDone: false,createdAt: DateTime.now(),),
-    Task(title: 'Sleep', description: "Sleep", isDone: false,createdAt: DateTime.now(),)
-  ];
+  List<Task> tasks = [];
 
   @override
   void initState(){
