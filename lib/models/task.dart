@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 class Task{
   String? id;
   String title;
@@ -19,20 +23,20 @@ class Task{
       'title' : title,
       'description' : description,
       'isDone' : isDone,
-      'createdAt' : createdAt.toIso8601String(),
-      'deadline' : deadline?.toIso8601String(),
+      'createdAt' : createdAt,
+      'deadline' : deadline,
     };
   }
 
-  static Task fromMap(Map<String, dynamic> map, String documentId){
+  factory Task.fromMap(Map<String, dynamic> map, String documentId){
     return Task(
         id: documentId,
         title: map['title'],
         description: map['description'],
         isDone: map['isDone'],
-        createdAt: DateTime.parse(map['createdAt']),
+        createdAt: (map['createdAt'] as Timestamp).toDate(),
       deadline:
-        map['deadline'] != null ? DateTime.parse(map['deadline']) : null,
+        map['deadline'] != null ? (map['deadline'] as Timestamp).toDate() : null,
     );
   }
 }

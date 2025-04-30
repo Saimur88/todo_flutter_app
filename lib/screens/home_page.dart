@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/firestore_service.dart';
-import 'package:todo_app/firestore_service.dart';
 
 
 
@@ -102,14 +101,15 @@ class _HomePageState extends State<HomePage> {
           TextButton(
               onPressed: (){
                 setState(() {
-                  tasks.removeAt(index);
+                  await _firestoreServices.deleteTask(tasks[index].id!);
+                  await _loadTask();
                 });
                 Navigator.pop(context);
               }, child: Text("Delete",style: TextStyle(color: Colors.red),))
         ],
       ),);
   }
-  void _addTask(){
+  Future<void> _addTask(String title) async {
     String newTaskTitle = _taskController.text;
     String newDesc = _descController.text;
     DateTime? deadline;
@@ -135,6 +135,10 @@ class _HomePageState extends State<HomePage> {
             createdAt: DateTime.now(),
           deadline: deadline,
         ));
+
+        await _firestoreServices.addTask(newTask);
+        await _loadTask();
+
         _taskController.clear();
         _descController.clear();
         _deadlineController.clear();
