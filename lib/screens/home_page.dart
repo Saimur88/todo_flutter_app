@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/firestore_service.dart';
+import 'package:todo_app/widgets/task_card.dart';
 
 
 
@@ -203,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                         _deadlineController.text =
                             "${pickDate.day}/${pickDate.month}/${pickDate.year}";
                       });
-                      await _firestoreService.updateTask(tasks[index]);
+
                     }
                   },
                 )
@@ -427,66 +428,17 @@ class _HomePageState extends State<HomePage> {
               itemCount: filteredTasks.length,
               itemBuilder: (context, index) {
                 final task = filteredTasks[index];
-                return Card(
-                  elevation: 6,
-                  margin: EdgeInsets.all(10),
-                  child: ListTile(
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                            onPressed: () => _editTask(tasks.indexOf(task)),
-                            icon: Icon(Icons.edit_note)),
-                        IconButton(
-                          onPressed: (){
-                            _confirmDelete(tasks.indexOf(task));
-                          },
-
-                          icon: Icon(Icons.delete_forever),
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(task.description),
-                        SizedBox(height: 4),
-                        SizedBox(height: 4),
-                        Text(
-                          task.deadline != null
-                              ? 'Deadline: ${task.deadline!.day}/${task.deadline!.month}/${task.deadline!.year}'
-                              : "No Deadline",
-                          style: TextStyle(fontSize: 12,color: Colors.grey, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 4,),
-                        Text(
-                          task.createdAt != null
-                              ? "Created At: ${TimeOfDay.fromDateTime(task.createdAt).format(context)}"
-                              : "Created At: unknown",
-                          style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
-                        )
-
-                      ],
-                    ),
-                    leading: Checkbox(
-                      value: task.isDone,
-                      onChanged: (value) async {
-                        setState(() {
-                          task.isDone = value!;
-                        });
-                        await _firestoreService.updateTask(task);
-                      },
-                    ),
-                    title: Text(
-                      task.title,
-                      style: TextStyle(
-                        decoration:
-                        task.isDone ? TextDecoration.lineThrough : null,
-                      ),
-                    ),
-                  ),
-                );
+                return TaskCard(
+                    task: task,
+                    onEdit: () => _editTask(index),
+                    onDelete: () => _confirmDelete(index),
+                    onToggleDone: (value) async {
+                      setState(() {
+                        task.isDone = value!;
+                      });
+                      await _firestoreService.updateTask(task);
+                    }
+                    );
               },
             ),
           ),
