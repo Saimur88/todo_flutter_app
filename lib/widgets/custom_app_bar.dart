@@ -24,9 +24,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'complete_all') {
-                onMarkAllIncomolete;
+                onMarkAllComplete();
               } else if (value == 'incomplete_all') {
-                onMarkAllIncomolete;
+                onMarkAllIncomolete();
               }
             },
             itemBuilder: (context) =>
