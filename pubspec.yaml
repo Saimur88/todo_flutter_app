@@ -37,6 +37,8 @@ dependencies:
   cloud_firestore: ^5.0.1 # Use the latest version
   provider: ^6.1.2           # For state management
   firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  flutter_local_notifications: ^17.0.0
 
 dev_dependencies:
   flutter_test:
