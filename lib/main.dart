@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'screens/home_page.dart';
 import 'package:todo_app/firebase_notifications.dart';
 
-
+final FirebaseNotificationService _notificationService = FirebaseNotificationService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await _notificationService.initialize();
   runApp(const TodoApp());
 }
 

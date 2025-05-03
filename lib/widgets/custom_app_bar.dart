@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onMarkAllComplete;
-  final VoidCallback onMarkAllIncomolete;
+  final VoidCallback onMarkAllIncomplete;
 
   const CustomAppBar({Key? key,
     required this.title,
     required this.onMarkAllComplete,
-    required this.onMarkAllIncomolete,
+    required this.onMarkAllIncomplete,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (value == 'complete_all') {
                 onMarkAllComplete();
               } else if (value == 'incomplete_all') {
-                onMarkAllIncomolete();
+                onMarkAllIncomplete();
               }
             },
             itemBuilder: (context) =>

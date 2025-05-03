@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task.dart';
-import 'package:todo_app/screens/home_page.dart';
-import 'package:todo_app/firestore_service.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;

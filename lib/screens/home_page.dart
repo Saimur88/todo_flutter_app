@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
       appBar: CustomAppBar(
           title: 'My ToDo App',
           onMarkAllComplete: _markAllTasksComplete,
-          onMarkAllIncomolete: _markAllTasksIncomplete,
+          onMarkAllIncomplete: _markAllTasksIncomplete,
       ),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
