@@ -3,6 +3,7 @@ import 'package:todo_app/models/task.dart';
 import 'package:todo_app/firestore_service.dart';
 import 'package:todo_app/widgets/task_card.dart';
 import 'package:todo_app/widgets/custom_app_bar.dart';
+import 'package:todo_app/firebase_notifications.dart';
 
 
 
@@ -22,6 +23,9 @@ enum TaskFilter { all, completed, incomplete }
 TaskFilter _selectedfilter = TaskFilter.all;
 
 class _HomePageState extends State<HomePage> {
+
+  final FirebaseNotificationService _notificationService = FirebaseNotificationService();
+
   final TextEditingController _taskController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _deadlineController = TextEditingController();
@@ -103,6 +107,7 @@ class _HomePageState extends State<HomePage> {
           TextButton(
               onPressed: () async {
                   await _firestoreService.deleteTask(tasks[index].id!);
+                  await _notificationService.cancelTaskNotification(tasks[index].title.hashCode);
                   await _loadTasks();
                 Navigator.pop(context);
               },
@@ -137,6 +142,16 @@ class _HomePageState extends State<HomePage> {
       );
 
         await _firestoreService.addTask(newTask);
+
+        if (newTask.deadline != null) {
+          await _notificationService.scheduleTaskNotification(
+              id: newTask.title.hashCode,
+              title: 'Task Reminder',
+              body: '${newTask.title} is due soon!',
+              scheduledTime: newTask.deadline!,
+          );
+        }
+
         await _loadTasks();
 
         _taskController.clear();
@@ -240,6 +255,16 @@ class _HomePageState extends State<HomePage> {
 
                     });
                     await _firestoreService.updateTask(tasks[index]);
+                    await _notificationService.cancelTaskNotification(tasks[index].title.hashCode);
+                    if (tasks[index].deadline != null) {
+                      await _notificationService.scheduleTaskNotification(
+                          id: tasks[index].title.hashCode,
+                          title: 'Task Reminder',
+                          body: '${tasks[index].title} is due soon!',
+                          scheduledTime: tasks[index].deadline!,
+                      );
+                    }
+
                     Navigator.pop(context);
                   }, child: Text("Save"))
             ],
